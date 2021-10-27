@@ -64,12 +64,12 @@ class MainActivity : AppCompatActivity() {
         rv.adapter = MyAdapter( db.retriveData(),this)
         rv.layoutManager = LinearLayoutManager(this)
     }
-    fun preUpdate(item:String) {
+    fun preUpdate(item:Note) {
         var txtt = EditText(this)
-        txtt.setText(item)
+        txtt.setText(item.note)
         AlertDialog.Builder(this)
             .setPositiveButton("Update", DialogInterface.OnClickListener { _, _ ->
-                update(txtt.text.toString(), item)
+                update(txtt.text.toString(), item.id)
             })
             .setNegativeButton("No", DialogInterface.OnClickListener { dialog, _ ->
                 dialog.cancel()
@@ -79,14 +79,17 @@ class MainActivity : AppCompatActivity() {
             .create()
             .show()
     }
-    fun update(aa:String, bb:String){
+    fun update(aa:String, bb:Int?){
         var up = db.update(aa,bb)
         Toast.makeText(this,"Updated $up",Toast.LENGTH_SHORT).show()
         not()}
-    fun preDelete(item:String){
+    fun preDelete(item:Int?){
         AlertDialog.Builder(this)
             .setPositiveButton("delete", DialogInterface.OnClickListener{
-                    _,_ -> delete(item)
+                    _,_ ->
+                if (item != null) {
+                    delete(item)
+                }
             })
             .setNegativeButton("No", DialogInterface.OnClickListener{
                     dialog,_ -> dialog.cancel()
@@ -95,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             .create()
             .show()
     }
-    fun delete(aa:String){
+    fun delete(aa:Int){
         db = DBHelper(this)
         var up = db.delete(aa)
         Toast.makeText(this,"Deleted $up",Toast.LENGTH_SHORT).show()

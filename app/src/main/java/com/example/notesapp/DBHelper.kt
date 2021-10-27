@@ -29,12 +29,16 @@ class DBHelper(context: Context):SQLiteOpenHelper(context,"Notes.db",null,1) {
 
     }
     @SuppressLint("Range")
-    fun retriveData():ArrayList<String>{
-        var al = arrayListOf<String>()
+    fun retriveData():ArrayList<Note>{
+        var al = arrayListOf<Note>()
         var c : Cursor = sdb.query("mynote",null,null, null,null,null,null)
         if (c.moveToFirst()) {
+            var id:Int? = null
+            var note:String? = null
             do {
-                al.add(c.getString(c.getColumnIndex("note")));
+                 id = c.getInt(c.getColumnIndex("id"))
+                 note =c.getString(c.getColumnIndex("note"))
+                al.add(Note(id,note))
             } while (c.moveToNext());
         }
         return al
@@ -47,15 +51,15 @@ class DBHelper(context: Context):SQLiteOpenHelper(context,"Notes.db",null,1) {
 //        return rr
 //    }
 
-    fun delete(s1:String):Int{
-    var nn =  sdb.delete("mynote","note=?", arrayOf(s1))
+    fun delete(s1:Int):Int{
+    var nn =  sdb.delete("mynote","id=?", arrayOf(s1.toString()))
         return nn
     }
 
-    fun update(s1:String,s2:String): Int {
+    fun update(s1:String,s2:Int?): Int {
         var cv = ContentValues()
         cv.put("note",s1)
-        var status = sdb.update("mynote",cv,"note=?", arrayOf(s2))
+        var status = sdb.update("mynote",cv,"id=?", arrayOf(s2.toString()))
         return status
 
     }
