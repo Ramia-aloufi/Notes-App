@@ -4,12 +4,13 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.notecell.view.*
 
-class MyAdapter(var item:ArrayList<String>):RecyclerView.Adapter<MyAdapter.ItemViewHolder>() {
+class MyAdapter(var item:ArrayList<String>,var context1: MainActivity):RecyclerView.Adapter<MyAdapter.ItemViewHolder>() {
     class ItemViewHolder(ItemView: View):RecyclerView.ViewHolder(ItemView) {
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -24,8 +25,14 @@ class MyAdapter(var item:ArrayList<String>):RecyclerView.Adapter<MyAdapter.ItemV
         var items = item[position]
         holder.itemView.apply {
             tv.text = items
+            imageView.setOnClickListener { context1.preUpdate(items)}
+            imageView2.setOnClickListener { context1.preDelete(items)}
     }
     }
 
     override fun getItemCount(): Int = item.size
+
+
+
+
 }
